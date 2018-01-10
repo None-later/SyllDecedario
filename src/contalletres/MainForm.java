@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -26,12 +27,16 @@ public class MainForm extends javax.swing.JFrame {
     private ArrayList<String> palabras;
     private int[] countLetras;
     private int[] countIniciales;
+    private String language;
 
     /**
      * Creates new form mainform
      */
     public MainForm() {
         initComponents();
+        esjRadioButtonMenuItem.setSelected(true);
+        language=esjRadioButtonMenuItem.getName();
+        langjLabel.setText(language);
         silabas = new ArrayList<>();
         palabras = new ArrayList<>();
         countLetras = new int[ASCIIEXTENDED];
@@ -52,6 +57,7 @@ public class MainForm extends javax.swing.JFrame {
     private void initComponents() {
 
         errorjDialog = new javax.swing.JDialog();
+        langButtonGroup = new javax.swing.ButtonGroup();
         procesarButton = new java.awt.Button();
         jScrollPane1 = new javax.swing.JScrollPane();
         inputjTextArea = new javax.swing.JTextArea();
@@ -65,10 +71,14 @@ public class MainForm extends javax.swing.JFrame {
         letrasjTextArea = new javax.swing.JTextArea();
         label5 = new java.awt.Label();
         label6 = new java.awt.Label();
+        langjLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         filejMenu = new javax.swing.JMenu();
         savejMenuItem = new javax.swing.JMenuItem();
         printjMenuItem = new javax.swing.JMenuItem();
+        languagejMenu = new javax.swing.JMenu();
+        esjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        enjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
 
         errorjDialog.setTitle("Error Message");
 
@@ -135,6 +145,10 @@ public class MainForm extends javax.swing.JFrame {
         label6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         label6.setText("PALABRAS");
 
+        langjLabel.setFont(new java.awt.Font("Dialog", 2, 11)); // NOI18N
+        langjLabel.setForeground(new java.awt.Color(0, 0, 204));
+        langjLabel.setText("jLabel1");
+
         filejMenu.setText("File");
         filejMenu.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
 
@@ -156,6 +170,27 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenuBar1.add(filejMenu);
 
+        languagejMenu.setText("Language");
+        languagejMenu.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+
+        langButtonGroup.add(esjRadioButtonMenuItem);
+        esjRadioButtonMenuItem.setSelected(true);
+        esjRadioButtonMenuItem.setText("Español");
+        esjRadioButtonMenuItem.setName("spanish"); // NOI18N
+        esjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                esjRadioButtonMenuItemItemStateChanged(evt);
+            }
+        });
+        languagejMenu.add(esjRadioButtonMenuItem);
+
+        langButtonGroup.add(enjRadioButtonMenuItem);
+        enjRadioButtonMenuItem.setText("English");
+        enjRadioButtonMenuItem.setName("english"); // NOI18N
+        languagejMenu.add(enjRadioButtonMenuItem);
+
+        jMenuBar1.add(languagejMenu);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -164,50 +199,57 @@ public class MainForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                    .addComponent(label6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addComponent(procesarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(label3, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(label4, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(langjLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(label6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
-                        .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(procesarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(label3, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(label4, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(46, 46, 46))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(158, 158, 158)
-                .addComponent(procesarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(415, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
+                .addGap(29, 29, 29)
+                .addComponent(langjLabel)
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(label4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(label5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jScrollPane4)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(46, 46, 46))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3)
+                            .addComponent(jScrollPane4)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(46, 46, 46))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(114, 114, 114)
+                        .addComponent(procesarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(384, Short.MAX_VALUE))))
         );
 
         pack();
@@ -269,7 +311,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         }
     }
- 
+
     private void procesarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_procesarButtonActionPerformed
         // TODO add your handling code here:
         cleanArrays();
@@ -277,8 +319,11 @@ public class MainForm extends javax.swing.JFrame {
         try {
             for (String word : palabras) {  //les paraules estan en lowerCase
                 word = word.trim();         //Diana vol sílabes minúscules, inicials/lletres majúscules
-                //cuentaSilabas(word);
-                countSyllables(word);
+                if(language.equals(esjRadioButtonMenuItem.getName())){
+                    cuentaSilabas(word);
+                }else if(language.equals(enjRadioButtonMenuItem.getName())){
+                    countSyllables(word);
+                }
                 word = word.toUpperCase();
                 for (int i = 0; i < word.length(); ++i) {
                     char letter = word.charAt(i);
@@ -434,9 +479,20 @@ public class MainForm extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_printjMenuItemActionPerformed
 
+    private void esjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_esjRadioButtonMenuItemItemStateChanged
+        // TODO add your handling code here:
+        if (esjRadioButtonMenuItem.isSelected()) {
+            language = esjRadioButtonMenuItem.getName();
+        } else {
+            language = enjRadioButtonMenuItem.getName();
+        }
+        langjLabel.setText(language);
+    }//GEN-LAST:event_esjRadioButtonMenuItemItemStateChanged
+
     private void saveToFile(String path) {
         try {
             PrintWriter pw = new PrintWriter(new File(path));
+            writeToFile(pw, "CABECERA");
             writeToFile(pw, "PALABRAS");
             writeToFile(pw, "LETRAS");
             writeToFile(pw, "INICIALES");
@@ -449,24 +505,30 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void writeToFile(PrintWriter pw, String tipo) {
-        pw.println();
-        pw.println("*************************");
-        pw.println("\t" + tipo);
-        pw.println("*************************");
-        switch (tipo) {
-            case "PALABRAS":
-                pw.print(formatPalabras("file"));
-                break;
-            case "LETRAS":
-                pw.print(formatLetras("file"));
-                break;
-            case "INICIALES":
-                pw.print(formatIniciales("file"));
-                break;
-            case "SÍLABAS":
-                pw.print(formatSilabas("file"));
+        if(tipo.equals("CABECERA")){
+            pw.println();
+            pw.println("\t\t\tIDIOMA: "+language);
+            pw.println("-------------------------------------------------------------------");
+        }else{
+            pw.println();
+            pw.println("*************************");
+            pw.println("\t" + tipo);
+            pw.println("*************************");
+            switch (tipo) {
+                case "PALABRAS":
+                    pw.print(formatPalabras("file"));
+                    break;
+                case "LETRAS":
+                    pw.print(formatLetras("file"));
+                    break;
+                case "INICIALES":
+                    pw.print(formatIniciales("file"));
+                    break;
+                case "SÍLABAS":
+                    pw.print(formatSilabas("file"));
+            }
+            pw.println();
         }
-        pw.println();
     }
 
     private boolean verifyTextAreas() {
@@ -526,7 +588,9 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButtonMenuItem enjRadioButtonMenuItem;
     private javax.swing.JDialog errorjDialog;
+    private javax.swing.JRadioButtonMenuItem esjRadioButtonMenuItem;
     private javax.swing.JMenu filejMenu;
     private javax.swing.JTextArea inicialesjTextArea;
     private javax.swing.JTextArea inputjTextArea;
@@ -539,6 +603,9 @@ public class MainForm extends javax.swing.JFrame {
     private java.awt.Label label4;
     private java.awt.Label label5;
     private java.awt.Label label6;
+    private javax.swing.ButtonGroup langButtonGroup;
+    private javax.swing.JLabel langjLabel;
+    private javax.swing.JMenu languagejMenu;
     private javax.swing.JTextArea letrasjTextArea;
     private javax.swing.JMenuItem printjMenuItem;
     private java.awt.Button procesarButton;
