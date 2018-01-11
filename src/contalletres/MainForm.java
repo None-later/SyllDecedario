@@ -36,6 +36,9 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         esjRadioButtonMenuItem.setSelected(true);
+        esjRadioButtonMenuItem.setActionCommand(esjRadioButtonMenuItem.getName());
+        enjRadioButtonMenuItem.setActionCommand(enjRadioButtonMenuItem.getName());
+        valjRadioButtonMenuItem.setActionCommand(valjRadioButtonMenuItem.getName());
         language = esjRadioButtonMenuItem.getName();
         langjLabel.setText(language);
         gameType = wordsjRadioButtonMenuItem.getName();
@@ -82,6 +85,7 @@ public class MainForm extends javax.swing.JFrame {
         languagejMenu = new javax.swing.JMenu();
         esjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         enjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        valjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         gameTypejMenu = new javax.swing.JMenu();
         wordsjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         sentencesjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
@@ -185,7 +189,7 @@ public class MainForm extends javax.swing.JFrame {
         esjRadioButtonMenuItem.setName("spanish"); // NOI18N
         esjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                esjRadioButtonMenuItemItemStateChanged(evt);
+                langjRadioButtonMenuItemItemStateChanged(evt);
             }
         });
         languagejMenu.add(esjRadioButtonMenuItem);
@@ -193,7 +197,22 @@ public class MainForm extends javax.swing.JFrame {
         langButtonGroup.add(enjRadioButtonMenuItem);
         enjRadioButtonMenuItem.setText("English");
         enjRadioButtonMenuItem.setName("english"); // NOI18N
+        enjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                langjRadioButtonMenuItemItemStateChanged(evt);
+            }
+        });
         languagejMenu.add(enjRadioButtonMenuItem);
+
+        langButtonGroup.add(valjRadioButtonMenuItem);
+        valjRadioButtonMenuItem.setText("Valencià");
+        valjRadioButtonMenuItem.setName("valencian"); // NOI18N
+        valjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                langjRadioButtonMenuItemItemStateChanged(evt);
+            }
+        });
+        languagejMenu.add(valjRadioButtonMenuItem);
 
         jMenuBar1.add(languagejMenu);
 
@@ -509,15 +528,18 @@ public class MainForm extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_printjMenuItemActionPerformed
 
-    private void esjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_esjRadioButtonMenuItemItemStateChanged
-        // TODO add your handling code here:
-        if (esjRadioButtonMenuItem.isSelected()) {
+    private void langjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_langjRadioButtonMenuItemItemStateChanged
+        // TODO add your handling code here:    
+        String lang=langButtonGroup.getSelection().getActionCommand();
+        if (lang.equals(esjRadioButtonMenuItem.getName())) {
             language = esjRadioButtonMenuItem.getName();
-        } else {
+        } else if(lang.equals(enjRadioButtonMenuItem.getName())) {
             language = enjRadioButtonMenuItem.getName();
+        }else if(lang.equals(valjRadioButtonMenuItem.getName())){
+            language = valjRadioButtonMenuItem.getName();
         }
         langjLabel.setText(language);
-    }//GEN-LAST:event_esjRadioButtonMenuItemItemStateChanged
+    }//GEN-LAST:event_langjRadioButtonMenuItemItemStateChanged
 
     private void wordsjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_wordsjRadioButtonMenuItemItemStateChanged
         // TODO add your handling code here:
@@ -653,6 +675,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem savejMenuItem;
     private javax.swing.JRadioButtonMenuItem sentencesjRadioButtonMenuItem;
     private javax.swing.JTextArea silabasjTextArea;
+    private javax.swing.JRadioButtonMenuItem valjRadioButtonMenuItem;
     private javax.swing.JRadioButtonMenuItem wordsjRadioButtonMenuItem;
     // End of variables declaration//GEN-END:variables
 }
