@@ -83,7 +83,7 @@ public class FilterStrings {
                     + MIN_UE + "," + MIN_VAL + ","
                     + MAY_ACENTO_ES + "," + MAY_ACENTO_VAL + ","
                     + MIN_ACENTO_ES + "," + MIN_ACENTO_VAL + ","
-                    + PUNTUACION_ES + "," + PUNTUACION_VAL + "," + "]", "");
+                    + PUNTUACION_ES + "," + PUNTUACION_VAL + "]", "");
         } else if (type.equals("sentence")) {
             cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_ES + "," + MAY_VAL + ","
                     + MIN_UE + "," + MIN_VAL + ","
@@ -97,10 +97,11 @@ public class FilterStrings {
 
     private String filterEnglish() {
         if (type.equals("word")) {  //si está mal se elimina la letra (mejor informar del error)
-            cadena = cadena.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
+            cadena = cadena.replaceAll(ESPACIOS, "");
             cadena = cadena.replaceAll("[^\\x27,\\x41-\\x5a,\\x61-\\x7a]", "");
+            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + "]", "");
         } else if (type.equals("sentence")) {
-            cadena = cadena.replaceAll("[^\\x27,\\x41-\\x5a,\\x61-\\x7a]", "");
+            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + "," + PUNTUACION_FRASES_UE + "]", "");
         }
         return cadena;
     }
