@@ -98,10 +98,9 @@ public class FilterStrings {
     private String filterEnglish() {
         if (type.equals("word")) {  //si está mal se elimina la letra (mejor informar del error)
             cadena = cadena.replaceAll(ESPACIOS, "");
-            cadena = cadena.replaceAll("[^\\x27,\\x41-\\x5a,\\x61-\\x7a]", "");
             cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + "]", "");
         } else if (type.equals("sentence")) {
-            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + "," + PUNTUACION_FRASES_UE + "]", "");
+            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + "," + PUNTUACION_EN + "," + PUNTUACION_FRASES_UE + "]", "");
         }
         return cadena;
     }
