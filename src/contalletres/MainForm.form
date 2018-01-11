@@ -22,6 +22,8 @@
     </Container>
     <Component class="javax.swing.ButtonGroup" name="langButtonGroup">
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="gameTypebuttonGroup">
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="filejMenu">
@@ -78,6 +80,35 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="English"/>
                 <Property name="name" type="java.lang.String" value="english" noResource="true"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="gameTypejMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Type"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="wordsjRadioButtonMenuItem">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="gameTypebuttonGroup"/>
+                </Property>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="Words"/>
+                <Property name="name" type="java.lang.String" value="words" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="wordsjRadioButtonMenuItemItemStateChanged"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="sentencesjRadioButtonMenuItem">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="gameTypebuttonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Sentences"/>
+                <Property name="name" type="java.lang.String" value="sentences" noResource="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>

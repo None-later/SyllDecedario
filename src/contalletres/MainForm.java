@@ -28,6 +28,7 @@ public class MainForm extends javax.swing.JFrame {
     private int[] countLetras;
     private int[] countIniciales;
     private String language;
+    private String gameType;
 
     /**
      * Creates new form mainform
@@ -35,7 +36,7 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         esjRadioButtonMenuItem.setSelected(true);
-        language=esjRadioButtonMenuItem.getName();
+        language = esjRadioButtonMenuItem.getName();
         langjLabel.setText(language);
         silabas = new ArrayList<>();
         palabras = new ArrayList<>();
@@ -58,6 +59,7 @@ public class MainForm extends javax.swing.JFrame {
 
         errorjDialog = new javax.swing.JDialog();
         langButtonGroup = new javax.swing.ButtonGroup();
+        gameTypebuttonGroup = new javax.swing.ButtonGroup();
         procesarButton = new java.awt.Button();
         jScrollPane1 = new javax.swing.JScrollPane();
         inputjTextArea = new javax.swing.JTextArea();
@@ -79,6 +81,9 @@ public class MainForm extends javax.swing.JFrame {
         languagejMenu = new javax.swing.JMenu();
         esjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         enjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        gameTypejMenu = new javax.swing.JMenu();
+        wordsjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        sentencesjRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
 
         errorjDialog.setTitle("Error Message");
 
@@ -190,6 +195,26 @@ public class MainForm extends javax.swing.JFrame {
         languagejMenu.add(enjRadioButtonMenuItem);
 
         jMenuBar1.add(languagejMenu);
+
+        gameTypejMenu.setText("Type");
+
+        gameTypebuttonGroup.add(wordsjRadioButtonMenuItem);
+        wordsjRadioButtonMenuItem.setSelected(true);
+        wordsjRadioButtonMenuItem.setText("Words");
+        wordsjRadioButtonMenuItem.setName("words"); // NOI18N
+        wordsjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                wordsjRadioButtonMenuItemItemStateChanged(evt);
+            }
+        });
+        gameTypejMenu.add(wordsjRadioButtonMenuItem);
+
+        gameTypebuttonGroup.add(sentencesjRadioButtonMenuItem);
+        sentencesjRadioButtonMenuItem.setText("Sentences");
+        sentencesjRadioButtonMenuItem.setName("sentences"); // NOI18N
+        gameTypejMenu.add(sentencesjRadioButtonMenuItem);
+
+        jMenuBar1.add(gameTypejMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -315,13 +340,13 @@ public class MainForm extends javax.swing.JFrame {
     private void procesarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_procesarButtonActionPerformed
         // TODO add your handling code here:
         cleanArrays();
-        filterInputText();
+        filterInputText();  //eliminar palabras repetidas y caracteres inválidos según language
         try {
             for (String word : palabras) {  //les paraules estan en lowerCase
                 word = word.trim();         //Diana vol sílabes minúscules, inicials/lletres majúscules
-                if(language.equals(esjRadioButtonMenuItem.getName())){
+                if (language.equals(esjRadioButtonMenuItem.getName())) {
                     cuentaSilabas(word);
-                }else if(language.equals(enjRadioButtonMenuItem.getName())){
+                } else if (language.equals(enjRadioButtonMenuItem.getName())) {
                     countSyllables(word);
                 }
                 word = word.toUpperCase();
@@ -348,18 +373,23 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_procesarButtonActionPerformed
 
     /**
-     * FUTURE IMPROVEMENT: -filter characters according to language chosen in
-     * menuBar (Spanish by now) -and according to type of game (words,
+     * FUTURE IMPROVEMENT: -filter characters according to type of game (words,
      * sentences-punctuation)
      */
     private void filterInputText() {
+        FilterStrings fs;
         String text = inputjTextArea.getText().toLowerCase();
-        for (String word : text.split("\\s")) {
-            FilterStrings fs = new FilterStrings("word", word);
-            word = fs.filterSpanish();
-            if (!palabras.contains(word)) {
-                palabras.add(word);
+        if (gameType.equals(wordsjRadioButtonMenuItem.getName())) {
+            for (String word : text.split("\\s")) {
+                fs = new FilterStrings(gameType, word, language);
+                word = fs.filterLanguage();
+                if (!palabras.contains(word)) {
+                    palabras.add(word);
+                }
             }
+        } else if (gameType.equals(sentencesjRadioButtonMenuItem.getName())) {  //hay que definir el separador entre frases
+            fs = new FilterStrings(gameType, text, language);
+            text = fs.filterLanguage();
         }
     }
 
@@ -489,6 +519,15 @@ public class MainForm extends javax.swing.JFrame {
         langjLabel.setText(language);
     }//GEN-LAST:event_esjRadioButtonMenuItemItemStateChanged
 
+    private void wordsjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_wordsjRadioButtonMenuItemItemStateChanged
+        // TODO add your handling code here:
+        if (wordsjRadioButtonMenuItem.isSelected()) {
+            gameType = wordsjRadioButtonMenuItem.getName();
+        } else {
+            gameType = sentencesjRadioButtonMenuItem.getName();
+        }
+    }//GEN-LAST:event_wordsjRadioButtonMenuItemItemStateChanged
+
     private void saveToFile(String path) {
         try {
             PrintWriter pw = new PrintWriter(new File(path));
@@ -505,11 +544,11 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void writeToFile(PrintWriter pw, String tipo) {
-        if(tipo.equals("CABECERA")){
+        if (tipo.equals("CABECERA")) {
             pw.println();
-            pw.println("\t\t\tIDIOMA: "+language);
+            pw.println("\t\t\tIDIOMA: " + language);
             pw.println("-------------------------------------------------------------------");
-        }else{
+        } else {
             pw.println();
             pw.println("*************************");
             pw.println("\t" + tipo);
@@ -592,6 +631,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JDialog errorjDialog;
     private javax.swing.JRadioButtonMenuItem esjRadioButtonMenuItem;
     private javax.swing.JMenu filejMenu;
+    private javax.swing.ButtonGroup gameTypebuttonGroup;
+    private javax.swing.JMenu gameTypejMenu;
     private javax.swing.JTextArea inicialesjTextArea;
     private javax.swing.JTextArea inputjTextArea;
     private javax.swing.JMenuBar jMenuBar1;
@@ -610,6 +651,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem printjMenuItem;
     private java.awt.Button procesarButton;
     private javax.swing.JMenuItem savejMenuItem;
+    private javax.swing.JRadioButtonMenuItem sentencesjRadioButtonMenuItem;
     private javax.swing.JTextArea silabasjTextArea;
+    private javax.swing.JRadioButtonMenuItem wordsjRadioButtonMenuItem;
     // End of variables declaration//GEN-END:variables
 }
