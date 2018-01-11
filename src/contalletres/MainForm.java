@@ -23,10 +23,10 @@ import javax.swing.JOptionPane;
 public class MainForm extends javax.swing.JFrame {
 
     private static final int ASCIIEXTENDED = 255;
-    private ArrayList<InfoSilabas> silabas;
-    private ArrayList<String> palabras;
-    private int[] countLetras;
-    private int[] countIniciales;
+    private final ArrayList<InfoSilabas> silabas;
+    private final ArrayList<String> palabras;
+    private final int[] countLetras;
+    private final int[] countIniciales;
     private String language;
     private String gameType;
 
@@ -38,6 +38,7 @@ public class MainForm extends javax.swing.JFrame {
         esjRadioButtonMenuItem.setSelected(true);
         language = esjRadioButtonMenuItem.getName();
         langjLabel.setText(language);
+        gameType = wordsjRadioButtonMenuItem.getName();
         silabas = new ArrayList<>();
         palabras = new ArrayList<>();
         countLetras = new int[ASCIIEXTENDED];
@@ -197,6 +198,7 @@ public class MainForm extends javax.swing.JFrame {
         jMenuBar1.add(languagejMenu);
 
         gameTypejMenu.setText("Type");
+        gameTypejMenu.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
 
         gameTypebuttonGroup.add(wordsjRadioButtonMenuItem);
         wordsjRadioButtonMenuItem.setSelected(true);
@@ -305,11 +307,9 @@ public class MainForm extends javax.swing.JFrame {
     private void countSyllables(String word) {
         Syllabifier s = new Syllabifier();
         List<String> syllables = s.getSyllables(word);
-        System.out.println(syllables);
         String syllable = "";
         for (int i = 0; i < syllables.size(); ++i) {
             String letter = syllables.get(i);
-            System.out.println(letter);
             if (letter.equals("-") || letter.equals("/")
                     || letter.equals("+") || letter.equals("_")
                     || (i + 1) == syllables.size() - 1) {       //[e, /, x, a, m, -, p, l, e]
@@ -388,7 +388,7 @@ public class MainForm extends javax.swing.JFrame {
                 }
             }
         } else if (gameType.equals(sentencesjRadioButtonMenuItem.getName())) {  //hay que definir el separador entre frases
-            fs = new FilterStrings(gameType, text, language);
+            fs = new FilterStrings(gameType, text, language);                   //no furula bien esto
             text = fs.filterLanguage();
         }
     }

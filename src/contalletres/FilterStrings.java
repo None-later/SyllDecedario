@@ -15,10 +15,9 @@ public class FilterStrings {
     private String cadena;
     private final String language;
 
-    private static final String ESPACIOS = "[\\p{Cntrl}&&[^\r\n\t]]";
-
+    private static final String ESPACIOS = "[\\p{Cntrl}&&[^\r\n\t]]";       //UE --> {english, castillian, valencian}
+                                                                            //ES --> {castillian, valencian}
     private static final String MAY_UE = "\\x41-\\x5a";
-    private static final String MAY_ES = "\\xc7";
     private static final String MAY_VAL = "\\xc7";
     private static final String MAY_CAS = "\\xd1";
 
@@ -62,13 +61,13 @@ public class FilterStrings {
     private String filterSpanish() {
         if (type.equals("word")) {
             cadena = cadena.replaceAll(ESPACIOS, "");
-            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + ","
-                    + MAY_ES + "," + MAY_CAS + "," + MIN_CAS + ","
+            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_CAS + ","
+                    + MIN_UE + "," + MIN_CAS + ","
                     + MAY_ACENTO_ES + "," + MIN_ACENTO_ES + ","
                     + PUNTUACION_ES + "," + PUNTUACION_CAS + "]", "");
         } else if (type.equals("sentence")) {
-            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + ","
-                    + MAY_ES + "," + MAY_CAS + "," + MIN_CAS + ","
+            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_CAS + ","
+                    + MIN_UE + "," + MIN_CAS + ","
                     + MAY_ACENTO_ES + "," + MIN_ACENTO_ES + ","
                     + PUNTUACION_ES + "," + PUNTUACION_CAS + ","
                     + PUNTUACION_FRASES_UE + "," + PUNTUACION_FRASES_CAS + "]", "");
@@ -79,13 +78,13 @@ public class FilterStrings {
     private String filterValencian() {
         if (type.equals("word")) {
             cadena = cadena.replaceAll(ESPACIOS, "");
-            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_ES + "," + MAY_VAL + ","
+            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_VAL + ","
                     + MIN_UE + "," + MIN_VAL + ","
                     + MAY_ACENTO_ES + "," + MAY_ACENTO_VAL + ","
                     + MIN_ACENTO_ES + "," + MIN_ACENTO_VAL + ","
                     + PUNTUACION_ES + "," + PUNTUACION_VAL + "]", "");
         } else if (type.equals("sentence")) {
-            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_ES + "," + MAY_VAL + ","
+            cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_VAL + ","
                     + MIN_UE + "," + MIN_VAL + ","
                     + MAY_ACENTO_ES + "," + MAY_ACENTO_VAL + ","
                     + MIN_ACENTO_ES + "," + MIN_ACENTO_VAL + ","
