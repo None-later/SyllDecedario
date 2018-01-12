@@ -28,9 +28,9 @@ public class MainForm extends javax.swing.JFrame {
     private final ArrayList<String> palabras;
     private final int[] countLetras;
     private final int[] countIniciales;
-    //private String language;
     private Languages language;
-    private String gameType;
+    //private String gameType;
+    private GameType gameType;
 
     /**
      * Creates new form mainform
@@ -40,7 +40,8 @@ public class MainForm extends javax.swing.JFrame {
         configRadioButtons();
         language = Languages.SPANISH;
         langjLabel.setText(language.getLanguageName());
-        gameType = wordsjRadioButtonMenuItem.getName();
+        //gameType = wordsjRadioButtonMenuItem.getName();
+        gameType = GameType.WORDS;
         silabas = new ArrayList<>();
         palabras = new ArrayList<>();
         countLetras = new int[ASCIIEXTENDED];
@@ -50,7 +51,8 @@ public class MainForm extends javax.swing.JFrame {
         silabasjTextArea.setLineWrap(true);
         inputjTextArea.setLineWrap(true);
     }
-    private void configRadioButtons(){
+
+    private void configRadioButtons() {
         esjRadioButtonMenuItem.setSelected(true);
         esjRadioButtonMenuItem.setActionCommand(Languages.SPANISH.getLanguageName());
         enjRadioButtonMenuItem.setActionCommand(Languages.ENGLISH.getLanguageName());
@@ -59,6 +61,7 @@ public class MainForm extends javax.swing.JFrame {
         enjRadioButtonMenuItem.setText(Languages.ENGLISH.getLanguageName());
         valjRadioButtonMenuItem.setText(Languages.VALENCIAN.getLanguageName());
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -412,7 +415,7 @@ public class MainForm extends javax.swing.JFrame {
     private void filterInputText() {
         FilterStrings fs;
         String text = inputjTextArea.getText().toLowerCase();
-        if (gameType.equals(wordsjRadioButtonMenuItem.getName())) {
+        if (gameType.equals(GameType.WORDS)) {
             for (String word : text.split("\\s")) {
                 fs = new FilterStrings(gameType, word, language);
                 word = fs.filterLanguage();
@@ -420,7 +423,7 @@ public class MainForm extends javax.swing.JFrame {
                     palabras.add(word);
                 }
             }
-        } else if (gameType.equals(sentencesjRadioButtonMenuItem.getName())) {  //hay que definir el separador entre frases
+        } else if (gameType.equals(GameType.SENTENCES)) {  //hay que definir el separador entre frases
             fs = new FilterStrings(gameType, text, language);                   //no furula bien esto
             text = fs.filterLanguage();
         }
@@ -558,10 +561,11 @@ public class MainForm extends javax.swing.JFrame {
     private void wordsjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_wordsjRadioButtonMenuItemItemStateChanged
         // TODO add your handling code here:
         if (wordsjRadioButtonMenuItem.isSelected()) {
-            gameType = wordsjRadioButtonMenuItem.getName();
+            gameType = GameType.WORDS;
         } else {
-            gameType = sentencesjRadioButtonMenuItem.getName();
+            gameType = GameType.SENTENCES;
         }
+        System.out.println(gameType.getGameTypeName());
     }//GEN-LAST:event_wordsjRadioButtonMenuItemItemStateChanged
 
     private void saveToFile(String path) {

@@ -11,7 +11,7 @@ package contalletres;
  */
 public class FilterStrings {
 
-    private final String type;    //word or sentence
+    private final GameType gameType;    //word or sentence
     private String cadena;
     private final Languages language;
 
@@ -41,8 +41,8 @@ public class FilterStrings {
     private static final String PUNTUACION_FRASES_UE = "\\x21,\\x22,\\x27-\\x29,\\x2c-\\x2e,\\x3a,\\x3b,\\x3f,\\x5b,\\x5e,\\x5f";   //!,",',(,),,,-,.,:,;,?,[,],_
     private static final String PUNTUACION_FRASES_CAS = "\\xa1,\\xbf";              //¡,¿
 
-    public FilterStrings(String type, String cadena, Languages language) {
-        this.type = type;
+    public FilterStrings(GameType gameType, String cadena, Languages language) {
+        this.gameType = gameType;
         this.cadena = cadena;
         this.language = language;
     }
@@ -61,14 +61,14 @@ public class FilterStrings {
     }
 
     private String filterSpanish() {
-        if (type.equals("words")) {
+        if (gameType.equals(GameType.WORDS)) {
             cadena = cadena.replaceAll(ESPACIOS, "");
             cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_CAS + ","
                     + MIN_UE + "," + MIN_CAS + ","
                     + MAY_ACENTO_ES + "," + MAY_ACENTO_CAS + ","
                     + MIN_ACENTO_ES + "," + MIN_ACENTO_CAS + ","
                     + PUNTUACION_ES + "," + PUNTUACION_CAS + "]", "");
-        } else if (type.equals("sentences")) {
+        } else if (gameType.equals(GameType.SENTENCES)) {
             cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_CAS + ","
                     + MIN_UE + "," + MIN_CAS + ","
                     + MAY_ACENTO_ES + "," + MAY_ACENTO_CAS + ","
@@ -80,14 +80,14 @@ public class FilterStrings {
     }
 
     private String filterValencian() {
-        if (type.equals("words")) {
+        if (gameType.equals(GameType.WORDS)) {
             cadena = cadena.replaceAll(ESPACIOS, "");
             cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_VAL + ","
                     + MIN_UE + "," + MIN_VAL + ","
                     + MAY_ACENTO_ES + "," + MAY_ACENTO_VAL + ","
                     + MIN_ACENTO_ES + "," + MIN_ACENTO_VAL + ","
                     + PUNTUACION_ES + "," + PUNTUACION_VAL + "]", "");
-        } else if (type.equals("sentences")) {
+        } else if (gameType.equals(GameType.SENTENCES)) {
             cadena = cadena.replaceAll("[^" + MAY_UE + "," + MAY_VAL + ","
                     + MIN_UE + "," + MIN_VAL + ","
                     + MAY_ACENTO_ES + "," + MAY_ACENTO_VAL + ","
@@ -99,10 +99,10 @@ public class FilterStrings {
     }
 
     private String filterEnglish() {
-        if (type.equals("words")) {  //si está mal se elimina la letra (mejor informar del error)
+        if (gameType.equals(GameType.WORDS)) {  //si está mal se elimina la letra (mejor informar del error)
             cadena = cadena.replaceAll(ESPACIOS, "");
             cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + "]", "");
-        } else if (type.equals("sentences")) {
+        } else if (gameType.equals(GameType.SENTENCES)) {
             cadena = cadena.replaceAll("[^" + MAY_UE + "," + MIN_UE + "," + PUNTUACION_EN + "," + PUNTUACION_FRASES_UE + "]", "");
         }
         return cadena;
