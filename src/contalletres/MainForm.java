@@ -29,7 +29,6 @@ public class MainForm extends javax.swing.JFrame {
     private final int[] countLetras;
     private final int[] countIniciales;
     private Languages language;
-    //private String gameType;
     private GameType gameType;
 
     /**
@@ -40,7 +39,6 @@ public class MainForm extends javax.swing.JFrame {
         configRadioButtons();
         language = Languages.SPANISH;
         langjLabel.setText(language.getLanguageName());
-        //gameType = wordsjRadioButtonMenuItem.getName();
         gameType = GameType.WORDS;
         silabas = new ArrayList<>();
         palabras = new ArrayList<>();
@@ -60,6 +58,9 @@ public class MainForm extends javax.swing.JFrame {
         esjRadioButtonMenuItem.setText(Languages.SPANISH.getLanguageName());
         enjRadioButtonMenuItem.setText(Languages.ENGLISH.getLanguageName());
         valjRadioButtonMenuItem.setText(Languages.VALENCIAN.getLanguageName());
+        
+        wordsjRadioButtonMenuItem.setText(GameType.WORDS.getGameTypeName());
+        sentencesjRadioButtonMenuItem.setText(GameType.SENTENCES.getGameTypeName());
     }
 
     /**
@@ -230,8 +231,9 @@ public class MainForm extends javax.swing.JFrame {
 
         gameTypebuttonGroup.add(wordsjRadioButtonMenuItem);
         wordsjRadioButtonMenuItem.setSelected(true);
-        wordsjRadioButtonMenuItem.setText("Words");
-        wordsjRadioButtonMenuItem.setName("words"); // NOI18N
+        wordsjRadioButtonMenuItem.setActionCommand("");
+        wordsjRadioButtonMenuItem.setLabel("");
+        wordsjRadioButtonMenuItem.setName(""); // NOI18N
         wordsjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 wordsjRadioButtonMenuItemItemStateChanged(evt);
@@ -240,9 +242,10 @@ public class MainForm extends javax.swing.JFrame {
         gameTypejMenu.add(wordsjRadioButtonMenuItem);
 
         gameTypebuttonGroup.add(sentencesjRadioButtonMenuItem);
-        sentencesjRadioButtonMenuItem.setText("Sentences");
-        sentencesjRadioButtonMenuItem.setName("sentences"); // NOI18N
+        sentencesjRadioButtonMenuItem.setActionCommand("");
+        sentencesjRadioButtonMenuItem.setName(""); // NOI18N
         gameTypejMenu.add(sentencesjRadioButtonMenuItem);
+        sentencesjRadioButtonMenuItem.getAccessibleContext().setAccessibleName("");
 
         jMenuBar1.add(gameTypejMenu);
 

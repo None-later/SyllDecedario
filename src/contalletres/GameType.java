@@ -10,8 +10,8 @@ package contalletres;
  * @author jesus
  */
 public enum GameType {
-    WORDS("words"),
-    SENTENCES("sentences");
+    WORDS("Words"),
+    SENTENCES("Sentences");
 
     private final String type;
 
