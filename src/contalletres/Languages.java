@@ -10,9 +10,9 @@ package contalletres;
  * @author jesus
  */
 public enum Languages {
-    SPANISH("spanish"),
-    VALENCIAN("valencian"),
-    ENGLISH("english");
+    SPANISH("Español"),
+    VALENCIAN("Valencià"),
+    ENGLISH("English");
 
     private final String lang;
 

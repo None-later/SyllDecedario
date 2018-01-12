@@ -13,7 +13,7 @@ public class FilterStrings {
 
     private final String type;    //word or sentence
     private String cadena;
-    private final String language;
+    private final Languages language;
 
     private static final String ESPACIOS = "[\\p{Cntrl}&&[^\r\n\t]]";       //UE --> {inglés, castellano, valenciano}
                                                                             //ES --> {castellano, valenciano}
@@ -41,7 +41,7 @@ public class FilterStrings {
     private static final String PUNTUACION_FRASES_UE = "\\x21,\\x22,\\x27-\\x29,\\x2c-\\x2e,\\x3a,\\x3b,\\x3f,\\x5b,\\x5e,\\x5f";   //!,",',(,),,,-,.,:,;,?,[,],_
     private static final String PUNTUACION_FRASES_CAS = "\\xa1,\\xbf";              //¡,¿
 
-    public FilterStrings(String type, String cadena, String language) {
+    public FilterStrings(String type, String cadena, Languages language) {
         this.type = type;
         this.cadena = cadena;
         this.language = language;
@@ -49,11 +49,11 @@ public class FilterStrings {
 
     public String filterLanguage() {
         switch (language) {
-            case "spanish":
+            case SPANISH:
                 return filterSpanish();
-            case "english":
+            case ENGLISH:
                 return filterEnglish();
-            case "valencian":
+            case VALENCIAN:
                 return filterValencian();
             default:
                 return cadena;  //no filter

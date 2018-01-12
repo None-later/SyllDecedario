@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
@@ -27,8 +28,8 @@ public class MainForm extends javax.swing.JFrame {
     private final ArrayList<String> palabras;
     private final int[] countLetras;
     private final int[] countIniciales;
-    private String language;
-    //private Languages language;
+    //private String language;
+    private Languages language;
     private String gameType;
 
     /**
@@ -36,14 +37,9 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-        esjRadioButtonMenuItem.setSelected(true);
-        esjRadioButtonMenuItem.setActionCommand(esjRadioButtonMenuItem.getName());
-        enjRadioButtonMenuItem.setActionCommand(enjRadioButtonMenuItem.getName());
-        valjRadioButtonMenuItem.setActionCommand(valjRadioButtonMenuItem.getName());
-        language = esjRadioButtonMenuItem.getName();
-        langjLabel.setText(language);
-        /*language=Languages.SPANISH;
-        langjLabel.setText(language.getLanguageName());*/
+        configRadioButtons();
+        language = Languages.SPANISH;
+        langjLabel.setText(language.getLanguageName());
         gameType = wordsjRadioButtonMenuItem.getName();
         silabas = new ArrayList<>();
         palabras = new ArrayList<>();
@@ -54,7 +50,15 @@ public class MainForm extends javax.swing.JFrame {
         silabasjTextArea.setLineWrap(true);
         inputjTextArea.setLineWrap(true);
     }
-    
+    private void configRadioButtons(){
+        esjRadioButtonMenuItem.setSelected(true);
+        esjRadioButtonMenuItem.setActionCommand(Languages.SPANISH.getLanguageName());
+        enjRadioButtonMenuItem.setActionCommand(Languages.ENGLISH.getLanguageName());
+        valjRadioButtonMenuItem.setActionCommand(Languages.VALENCIAN.getLanguageName());
+        esjRadioButtonMenuItem.setText(Languages.SPANISH.getLanguageName());
+        enjRadioButtonMenuItem.setText(Languages.ENGLISH.getLanguageName());
+        valjRadioButtonMenuItem.setText(Languages.VALENCIAN.getLanguageName());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -188,8 +192,8 @@ public class MainForm extends javax.swing.JFrame {
 
         langButtonGroup.add(esjRadioButtonMenuItem);
         esjRadioButtonMenuItem.setSelected(true);
-        esjRadioButtonMenuItem.setText("Español");
-        esjRadioButtonMenuItem.setName("spanish"); // NOI18N
+        esjRadioButtonMenuItem.setActionCommand("");
+        esjRadioButtonMenuItem.setName(""); // NOI18N
         esjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 langjRadioButtonMenuItemItemStateChanged(evt);
@@ -198,8 +202,7 @@ public class MainForm extends javax.swing.JFrame {
         languagejMenu.add(esjRadioButtonMenuItem);
 
         langButtonGroup.add(enjRadioButtonMenuItem);
-        enjRadioButtonMenuItem.setText("English");
-        enjRadioButtonMenuItem.setName("english"); // NOI18N
+        enjRadioButtonMenuItem.setName(""); // NOI18N
         enjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 langjRadioButtonMenuItemItemStateChanged(evt);
@@ -208,8 +211,8 @@ public class MainForm extends javax.swing.JFrame {
         languagejMenu.add(enjRadioButtonMenuItem);
 
         langButtonGroup.add(valjRadioButtonMenuItem);
-        valjRadioButtonMenuItem.setText("Valencià");
-        valjRadioButtonMenuItem.setName("valencian"); // NOI18N
+        valjRadioButtonMenuItem.setLabel("");
+        valjRadioButtonMenuItem.setName(""); // NOI18N
         valjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 langjRadioButtonMenuItemItemStateChanged(evt);
@@ -366,12 +369,18 @@ public class MainForm extends javax.swing.JFrame {
         try {
             for (String word : palabras) {  //les paraules estan en lowerCase
                 word = word.trim();         //Diana vol sílabes minúscules, inicials/lletres majúscules
-                if (language.equals(esjRadioButtonMenuItem.getName())) {
-                    cuentaSilabas(word);
-                } else if (language.equals(enjRadioButtonMenuItem.getName())) {
-                    countSyllables(word);
-                }else if(language.equals(valjRadioButtonMenuItem.getName())) {
-                    cuentaSilabas(word);
+                switch (language) {
+                    case SPANISH:
+                        cuentaSilabas(word);
+                        break;
+                    case ENGLISH:
+                        countSyllables(word);
+                        break;
+                    case VALENCIAN:
+                        cuentaSilabas(word);
+                        break;
+                    default:
+                        break;
                 }
                 word = word.toUpperCase();
                 for (int i = 0; i < word.length(); ++i) {
@@ -535,15 +544,15 @@ public class MainForm extends javax.swing.JFrame {
 
     private void langjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_langjRadioButtonMenuItemItemStateChanged
         // TODO add your handling code here:    
-        String lang=langButtonGroup.getSelection().getActionCommand();
-        if (lang.equals(esjRadioButtonMenuItem.getName())) {
-            language = esjRadioButtonMenuItem.getName();
-        } else if(lang.equals(enjRadioButtonMenuItem.getName())) {
-            language = enjRadioButtonMenuItem.getName();
-        }else if(lang.equals(valjRadioButtonMenuItem.getName())){
-            language = valjRadioButtonMenuItem.getName();
+        String lang = langButtonGroup.getSelection().getActionCommand();
+        if (lang.equals(Languages.SPANISH.getLanguageName())) {
+            language = Languages.SPANISH;
+        } else if (lang.equals(Languages.ENGLISH.getLanguageName())) {
+            language = Languages.ENGLISH;
+        } else if (lang.equals(Languages.VALENCIAN.getLanguageName())) {
+            language = Languages.VALENCIAN;
         }
-        langjLabel.setText(language);
+        langjLabel.setText(language.getLanguageName());
     }//GEN-LAST:event_langjRadioButtonMenuItemItemStateChanged
 
     private void wordsjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_wordsjRadioButtonMenuItemItemStateChanged

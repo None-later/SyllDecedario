@@ -66,8 +66,8 @@
                   <ComponentRef name="langButtonGroup"/>
                 </Property>
                 <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="Espa&#xf1;ol"/>
-                <Property name="name" type="java.lang.String" value="spanish" noResource="true"/>
+                <Property name="actionCommand" type="java.lang.String" value=""/>
+                <Property name="name" type="java.lang.String" value="" noResource="true"/>
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="langjRadioButtonMenuItemItemStateChanged"/>
@@ -78,8 +78,7 @@
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                   <ComponentRef name="langButtonGroup"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="English"/>
-                <Property name="name" type="java.lang.String" value="english" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="" noResource="true"/>
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="langjRadioButtonMenuItemItemStateChanged"/>
@@ -90,8 +89,8 @@
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                   <ComponentRef name="langButtonGroup"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Valenci&#xe0;"/>
-                <Property name="name" type="java.lang.String" value="valencian" noResource="true"/>
+                <Property name="label" type="java.lang.String" value=""/>
+                <Property name="name" type="java.lang.String" value="" noResource="true"/>
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="langjRadioButtonMenuItemItemStateChanged"/>
