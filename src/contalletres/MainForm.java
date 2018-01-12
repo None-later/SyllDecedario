@@ -28,6 +28,7 @@ public class MainForm extends javax.swing.JFrame {
     private final int[] countLetras;
     private final int[] countIniciales;
     private String language;
+    //private Languages language;
     private String gameType;
 
     /**
@@ -41,6 +42,8 @@ public class MainForm extends javax.swing.JFrame {
         valjRadioButtonMenuItem.setActionCommand(valjRadioButtonMenuItem.getName());
         language = esjRadioButtonMenuItem.getName();
         langjLabel.setText(language);
+        /*language=Languages.SPANISH;
+        langjLabel.setText(language.getLanguageName());*/
         gameType = wordsjRadioButtonMenuItem.getName();
         silabas = new ArrayList<>();
         palabras = new ArrayList<>();
@@ -51,7 +54,7 @@ public class MainForm extends javax.swing.JFrame {
         silabasjTextArea.setLineWrap(true);
         inputjTextArea.setLineWrap(true);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -367,6 +370,8 @@ public class MainForm extends javax.swing.JFrame {
                     cuentaSilabas(word);
                 } else if (language.equals(enjRadioButtonMenuItem.getName())) {
                     countSyllables(word);
+                }else if(language.equals(valjRadioButtonMenuItem.getName())) {
+                    cuentaSilabas(word);
                 }
                 word = word.toUpperCase();
                 for (int i = 0; i < word.length(); ++i) {
