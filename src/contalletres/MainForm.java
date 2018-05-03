@@ -1,16 +1,18 @@
 package contalletres;
 
+import java.util.NoSuchElementException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
-import javax.swing.ButtonGroup;
+import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import librerias.jerarquicos.ABC;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,6 +32,8 @@ public class MainForm extends javax.swing.JFrame {
     private final int[] countIniciales;
     private Languages language;
     private GameType gameType;
+    private ABC<String> bst;
+    private final List<String> wordsNotInDic;
 
     /**
      * Creates new form mainform
@@ -40,10 +44,13 @@ public class MainForm extends javax.swing.JFrame {
         language = Languages.SPANISH;
         langjLabel.setText(language.getLanguageName());
         gameType = GameType.WORDS;
+
         silabas = new ArrayList<>();
         palabras = new ArrayList<>();
         countLetras = new int[ASCIIEXTENDED];
         countIniciales = new int[ASCIIEXTENDED];
+        wordsNotInDic = new ArrayList<>();
+
         letrasjTextArea.setLineWrap(true);
         inicialesjTextArea.setLineWrap(true);
         silabasjTextArea.setLineWrap(true);
@@ -58,7 +65,7 @@ public class MainForm extends javax.swing.JFrame {
         esjRadioButtonMenuItem.setText(Languages.SPANISH.getLanguageName());
         enjRadioButtonMenuItem.setText(Languages.ENGLISH.getLanguageName());
         valjRadioButtonMenuItem.setText(Languages.VALENCIAN.getLanguageName());
-        
+
         wordsjRadioButtonMenuItem.setText(GameType.WORDS.getGameTypeName());
         sentencesjRadioButtonMenuItem.setText(GameType.SENTENCES.getGameTypeName());
     }
@@ -82,11 +89,11 @@ public class MainForm extends javax.swing.JFrame {
         silabasjTextArea = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         inicialesjTextArea = new javax.swing.JTextArea();
-        label3 = new java.awt.Label();
-        label4 = new java.awt.Label();
+        letrasLabel = new java.awt.Label();
+        inicialesLabel = new java.awt.Label();
         jScrollPane4 = new javax.swing.JScrollPane();
         letrasjTextArea = new javax.swing.JTextArea();
-        label5 = new java.awt.Label();
+        silabasLabel = new java.awt.Label();
         label6 = new java.awt.Label();
         langjLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -147,11 +154,11 @@ public class MainForm extends javax.swing.JFrame {
         inicialesjTextArea.setTabSize(2);
         jScrollPane3.setViewportView(inicialesjTextArea);
 
-        label3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        label3.setText("LETRAS");
+        letrasLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        letrasLabel.setText("LETRAS");
 
-        label4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        label4.setText("INICIALES");
+        inicialesLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        inicialesLabel.setText("INICIALES");
 
         letrasjTextArea.setEditable(false);
         letrasjTextArea.setColumns(20);
@@ -160,10 +167,10 @@ public class MainForm extends javax.swing.JFrame {
         letrasjTextArea.setTabSize(2);
         jScrollPane4.setViewportView(letrasjTextArea);
 
-        label5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        label5.setText(" SÍLABAS (castellano)");
+        silabasLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        silabasLabel.setText(" SÍLABAS");
 
-        label6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        label6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         label6.setText("PALABRAS");
 
         langjLabel.setFont(new java.awt.Font("Dialog", 2, 11)); // NOI18N
@@ -196,7 +203,6 @@ public class MainForm extends javax.swing.JFrame {
 
         langButtonGroup.add(esjRadioButtonMenuItem);
         esjRadioButtonMenuItem.setSelected(true);
-        esjRadioButtonMenuItem.setActionCommand("");
         esjRadioButtonMenuItem.setName(""); // NOI18N
         esjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -215,7 +221,6 @@ public class MainForm extends javax.swing.JFrame {
         languagejMenu.add(enjRadioButtonMenuItem);
 
         langButtonGroup.add(valjRadioButtonMenuItem);
-        valjRadioButtonMenuItem.setLabel("");
         valjRadioButtonMenuItem.setName(""); // NOI18N
         valjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -231,8 +236,6 @@ public class MainForm extends javax.swing.JFrame {
 
         gameTypebuttonGroup.add(wordsjRadioButtonMenuItem);
         wordsjRadioButtonMenuItem.setSelected(true);
-        wordsjRadioButtonMenuItem.setActionCommand("");
-        wordsjRadioButtonMenuItem.setLabel("");
         wordsjRadioButtonMenuItem.setName(""); // NOI18N
         wordsjRadioButtonMenuItem.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -242,10 +245,8 @@ public class MainForm extends javax.swing.JFrame {
         gameTypejMenu.add(wordsjRadioButtonMenuItem);
 
         gameTypebuttonGroup.add(sentencesjRadioButtonMenuItem);
-        sentencesjRadioButtonMenuItem.setActionCommand("");
         sentencesjRadioButtonMenuItem.setName(""); // NOI18N
         gameTypejMenu.add(sentencesjRadioButtonMenuItem);
-        sentencesjRadioButtonMenuItem.getAccessibleContext().setAccessibleName("");
 
         jMenuBar1.add(gameTypejMenu);
 
@@ -270,19 +271,19 @@ public class MainForm extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(label3, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+                            .addComponent(letrasLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(label4, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+                            .addComponent(inicialesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(46, 46, 46))))))
+                                .addGap(25, 25, 25))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(silabasLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,10 +293,10 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(label4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(label5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(letrasLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(inicialesLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(silabasLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -368,19 +369,49 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
+    private void coutSyllablesDic(String word) {
+        try {
+            System.out.println("WORD " + word);
+            String dicEntry = bst.getSubstring(word);
+            String syllables = dicEntry.substring(dicEntry.indexOf("=") + 1);
+            System.out.println("GET SUBSTRING " + syllables);
+
+            boolean found;
+            InfoSilabas infoSilabas;
+            String separador = syllables.contains("·") ? "·" : " ";
+            for (String syllable : syllables.split(separador)) {
+                found = false;
+                for (InfoSilabas is : silabas) {
+                    if (syllable.equals(is.getSilaba())) {
+                        found = true;
+                        is.incrementCount();
+                        break;
+                    }
+                }
+                if (!found) {
+                    infoSilabas = new InfoSilabas(syllable);
+                    infoSilabas.incrementCount();
+                    silabas.add(infoSilabas);
+                }
+            }
+        } catch (NoSuchElementException nsee) {
+            wordsNotInDic.add(word);
+        }
+    }
+
     private void procesarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_procesarButtonActionPerformed
-        // TODO add your handling code here:
         cleanArrays();
         filterInputText();  //eliminar palabras repetidas y caracteres inválidos según language
         try {
             for (String word : palabras) {  //les paraules estan en lowerCase
+                //STORE SYLLABLES IN ARRAYLIST silabas
                 word = word.trim();         //Diana vol sílabes minúscules, inicials/lletres majúscules
                 switch (language) {
                     case SPANISH:
                         cuentaSilabas(word);
                         break;
                     case ENGLISH:
-                        countSyllables(word);
+                        coutSyllablesDic(word);
                         break;
                     case VALENCIAN:
                         cuentaSilabas(word);
@@ -388,15 +419,18 @@ public class MainForm extends javax.swing.JFrame {
                     default:
                         break;
                 }
-                word = word.toUpperCase();
-                for (int i = 0; i < word.length(); ++i) {
-                    char letter = word.charAt(i);
-                    int ascii = (int) letter;
-                    if (ascii <= ASCIIEXTENDED) {   //index out of bounds (not asciiExtended character)
-                        if (i == 0) {
-                            ++countIniciales[ascii];
+                if (!wordsNotInDic.contains(word)) {
+                    //STORE LETTERS & INITIALS
+                    word = word.toUpperCase();
+                    for (int i = 0; i < word.length(); ++i) {
+                        char letter = word.charAt(i);
+                        int ascii = (int) letter;
+                        if (ascii <= ASCIIEXTENDED) {   //index out of bounds (not asciiExtended character)
+                            if (i == 0) {
+                                ++countIniciales[ascii];
+                            }
+                            ++countLetras[ascii];
                         }
-                        ++countLetras[ascii];
                     }
                 }
             }
@@ -405,11 +439,29 @@ public class MainForm extends javax.swing.JFrame {
             formatLetras("ui");
             formatIniciales("ui");
             formatSilabas("ui");
+            if (!wordsNotInDic.isEmpty()) {
+                storeNewWords();
+                String errorMsg = "Consulta el archivo newWords.txt";
+                JOptionPane.showMessageDialog(null, errorMsg, "Missatge d'error", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (Exception e) {
             String errorMsg = "Ha ocorregut un error inesperat\nPosat en contacte amb el teu germà per a solventar-ho";
             JOptionPane.showMessageDialog(null, errorMsg, "Missatge d'error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_procesarButtonActionPerformed
+
+    private void storeNewWords() {
+        PrintWriter pw;
+        try {
+            pw = new PrintWriter(new File("newWords.txt"));
+            wordsNotInDic.forEach((st) -> {
+                pw.println(st);
+            });
+            pw.close();
+        } catch (FileNotFoundException fnfe) {
+            System.err.println(fnfe.getMessage());
+        }
+    }
 
     /**
      * FUTURE IMPROVEMENT: -filter characters according to type of game (words,
@@ -422,7 +474,7 @@ public class MainForm extends javax.swing.JFrame {
             for (String word : text.split("\\s")) {
                 fs = new FilterStrings(gameType, word, language);
                 word = fs.filterLanguage();
-                if (!palabras.contains(word)) {
+                if (!word.equals("") && !palabras.contains(word)) {
                     palabras.add(word);
                 }
             }
@@ -437,6 +489,7 @@ public class MainForm extends javax.swing.JFrame {
         Arrays.fill(countLetras, 0);
         silabas.clear();
         palabras.clear();
+        wordsNotInDic.clear();
     }
 
     private String formatPalabras(String tipo) {
@@ -452,6 +505,7 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private String formatLetras(String tipo) {
+        int sumaLetras = 0;
         String txt = "";
         String separador = "";
         if (tipo.equals("ui")) {
@@ -461,18 +515,21 @@ public class MainForm extends javax.swing.JFrame {
         }
         for (int i = 0; i < countLetras.length; ++i) {
             if (countLetras[i] > 0) {
+                sumaLetras += countLetras[i];
                 char letter = (char) i;
                 txt += "\n" + letter + separador + "—" + separador + countLetras[i];
             }
         }
         txt = txt.trim();
         if (tipo.equals("ui")) {
+            letrasLabel.setText(letrasLabel.getText() + " (" + sumaLetras + ") ");
             letrasjTextArea.setText(txt);
         }
         return txt;
     }
 
     private String formatIniciales(String tipo) {
+        int sumaIniciales = 0;
         String txt = "";
         String separador = "";
         if (tipo.equals("ui")) {
@@ -482,18 +539,22 @@ public class MainForm extends javax.swing.JFrame {
         }
         for (int i = 0; i < countIniciales.length; ++i) {
             if (countIniciales[i] > 0) {
+                sumaIniciales += countIniciales[i];
                 char letter = (char) i;
                 txt += "\n" + letter + separador + "—" + separador + countIniciales[i];
             }
         }
         txt = txt.trim();
         if (tipo.equals("ui")) {
+            inicialesLabel.setText(inicialesLabel.getText() + " (" + sumaIniciales + ") ");
             inicialesjTextArea.setText(txt);
         }
         return txt;
     }
 
     private String formatSilabas(String tipo) {
+        int sumaSilabas = 0;
+        int numSilabas1Letras = 0, numSilabas2Letras = 0, numSilabas3Letras = 0;
         String txt = "";
         String separador = "";
         if (tipo.equals("ui")) {
@@ -503,11 +564,28 @@ public class MainForm extends javax.swing.JFrame {
         }
         for (InfoSilabas is : silabas) {
             if (is.getCount() > 0) {
+                sumaSilabas += is.getCount();
                 txt += "\n" + is.getSilaba() + separador + "—" + separador + is.getCount();
+                switch (is.getSilLength()) {
+                    case 1:
+                        numSilabas1Letras += is.getCount();
+                        break;
+                    case 2:
+                        numSilabas2Letras += is.getCount();
+                        break;
+                    case 3:
+                        numSilabas3Letras += is.getCount();
+                        break;
+                }
             }
         }
         txt = txt.trim();
         if (tipo.equals("ui")) {
+            silabasLabel.setText(silabasLabel.getText()
+                    + "(" + sumaSilabas + ")"
+                    + "=" + numSilabas1Letras
+                    + "-" + numSilabas2Letras
+                    + "-" + numSilabas3Letras);
             silabasjTextArea.setText(txt);
         }
         return txt;
@@ -518,10 +596,12 @@ public class MainForm extends javax.swing.JFrame {
         silabasjTextArea.setText("");
         inicialesjTextArea.setText("");
         letrasjTextArea.setText("");
+        silabasLabel.setText("SÍLABAS");
+        inicialesLabel.setText("INICIALES");
+        letrasLabel.setText("LETRAS");
     }
 
     private void savejMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savejMenuItemActionPerformed
-        // TODO add your handling code here:
         if (!verifyTextAreas()) {
             String errorMsg = "Introdueix dades abans de guardar\n";
             JOptionPane.showMessageDialog(null, errorMsg, "Missatge d'error", JOptionPane.ERROR_MESSAGE);
@@ -536,7 +616,6 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_savejMenuItemActionPerformed
 
     private void printjMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printjMenuItemActionPerformed
-        // TODO add your handling code here:
         PrinterJob job = PrinterJob.getPrinterJob();
         job.setPrintable(new Print(this));
         /*boolean ok = job.printDialog();
@@ -549,11 +628,12 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_printjMenuItemActionPerformed
 
     private void langjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_langjRadioButtonMenuItemItemStateChanged
-        // TODO add your handling code here:    
         String lang = langButtonGroup.getSelection().getActionCommand();
         if (lang.equals(Languages.SPANISH.getLanguageName())) {
             language = Languages.SPANISH;
         } else if (lang.equals(Languages.ENGLISH.getLanguageName())) {
+            loadBST();
+            showBST();
             language = Languages.ENGLISH;
         } else if (lang.equals(Languages.VALENCIAN.getLanguageName())) {
             language = Languages.VALENCIAN;
@@ -561,8 +641,64 @@ public class MainForm extends javax.swing.JFrame {
         langjLabel.setText(language.getLanguageName());
     }//GEN-LAST:event_langjRadioButtonMenuItemItemStateChanged
 
+    private void showBST() {    //sólo para inglés
+        //System.out.println("inOrdre " + bst.inOrdre());
+        System.out.println("El maxim " + bst.max());
+        System.out.println("El minim " + bst.min());
+        System.out.println("Talla " + bst.getSize());
+//        System.out.println("Nombre de nodes " + bst.numNodes());
+//        System.out.println("Nombre de fulles " + bst.numFulles());
+//        System.out.println("Per nivells " + bst.perNivells());
+//        System.out.println("A nivell 3 " + bst.contarANivell(3));
+    }
+
+    private void finalFile() {
+        String[] vec = new String[45477];
+        Scanner s, sr;
+        PrintWriter pw;
+        String entry, entryR, word, wordR;
+        List<Integer> randNumList = new ArrayList<>();
+        for (int i = 0; i < 45477; ++i) {
+            randNumList.add(i);
+        }
+        Collections.shuffle(randNumList);
+        int i = 0;
+        try {
+            s = new Scanner(new File("syllables.txt"));
+            pw = new PrintWriter(new File("SYLLABLESfinal.txt"));
+            while (s.hasNext()) {
+                entry = s.nextLine();
+                int pos = randNumList.get(i++);
+                vec[pos] = entry;
+            }
+            s.close();
+            for (String st : vec) {
+                pw.println(st);
+            }
+            pw.close();
+        } catch (FileNotFoundException fnfe) {
+            System.err.println(fnfe.getMessage());
+        }
+    }
+
+    private void loadBST() {
+        Scanner s;
+        bst = new ABC();
+        String entry;
+        try {
+            s = new Scanner(new File("syllables.txt"));
+            int i = 0;
+            while (s.hasNext()) {
+                entry = s.nextLine();
+                bst.inserir(entry);
+            }
+            s.close();
+        } catch (FileNotFoundException fnfe) {
+            System.err.println(fnfe.getMessage());
+        }
+    }
+
     private void wordsjRadioButtonMenuItemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_wordsjRadioButtonMenuItemItemStateChanged
-        // TODO add your handling code here:
         if (wordsjRadioButtonMenuItem.isSelected()) {
             gameType = GameType.WORDS;
         } else {
@@ -676,6 +812,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu filejMenu;
     private javax.swing.ButtonGroup gameTypebuttonGroup;
     private javax.swing.JMenu gameTypejMenu;
+    private java.awt.Label inicialesLabel;
     private javax.swing.JTextArea inicialesjTextArea;
     private javax.swing.JTextArea inputjTextArea;
     private javax.swing.JMenuBar jMenuBar1;
@@ -683,18 +820,17 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private java.awt.Label label3;
-    private java.awt.Label label4;
-    private java.awt.Label label5;
     private java.awt.Label label6;
     private javax.swing.ButtonGroup langButtonGroup;
     private javax.swing.JLabel langjLabel;
     private javax.swing.JMenu languagejMenu;
+    private java.awt.Label letrasLabel;
     private javax.swing.JTextArea letrasjTextArea;
     private javax.swing.JMenuItem printjMenuItem;
     private java.awt.Button procesarButton;
     private javax.swing.JMenuItem savejMenuItem;
     private javax.swing.JRadioButtonMenuItem sentencesjRadioButtonMenuItem;
+    private java.awt.Label silabasLabel;
     private javax.swing.JTextArea silabasjTextArea;
     private javax.swing.JRadioButtonMenuItem valjRadioButtonMenuItem;
     private javax.swing.JRadioButtonMenuItem wordsjRadioButtonMenuItem;

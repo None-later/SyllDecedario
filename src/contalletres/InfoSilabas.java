@@ -8,7 +8,7 @@ package contalletres;
 import java.util.ArrayList;
 
 /**
- *
+ * 
  * @author jesus
  */
 public class InfoSilabas extends ArrayList{
@@ -16,11 +16,6 @@ public class InfoSilabas extends ArrayList{
     private int count;
     private String silaba;
 
-    public Override contains(){
-        return null;
-        
-    }
-    
     public InfoSilabas(String silaba) {
         this.silaba = silaba;
         this.count = 0;
@@ -45,5 +40,9 @@ public class InfoSilabas extends ArrayList{
 
     public int getCount() {
         return this.count;
+    }
+    
+    public int getSilLength(){
+        return silaba.length();
     }
 }

@@ -46,6 +46,7 @@ public class Syllabifier {
 
         text = (Pattern.compile("([bcdfghjklmnpqrstvwxz])$1([^ ])",
                 Pattern.CASE_INSENSITIVE).matcher(text)).replaceAll("$1-$1$2");
+        System.out.println(text);
 
         int position = 0;
         while (position < text.length() - 1) {
@@ -61,7 +62,7 @@ public class Syllabifier {
                     }
                 }
             }
-            position = position + 1;
+            ++position;
         }
 
         int start = 0;
@@ -78,8 +79,8 @@ public class Syllabifier {
 
                 if (end <= text.length() - 1
                         && (CONSONANT_PAIRS.contains(text.substring(start + 1,
-                        end)) || CONSONANT_BLENDS.contains(text
-                        .substring(start + 1, end)))
+                                end)) || CONSONANT_BLENDS.contains(text
+                                .substring(start + 1, end)))
                         && VOWEL_LIST.contains("" + text.charAt(end))
                         && !(text.substring(end, end + 2).equals("e "))) {
                     text = text.substring(0, start + 1) + "/"
